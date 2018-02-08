@@ -47,10 +47,10 @@ if [ ! -f $srltstEX ]; then
 fi
 cp $srltstEX tmp/
 
-echo "Enter the exacutable file name for matrix multiplication and press [ENTER] (default is main):"
+echo "Enter the exacutable file name for matrix multiplication and press [ENTER] (default is linearsystemsolver):"
 read mainEX
 if [ "$mainEX" = "" ]; then
-	mainEX=main
+	mainEX=linearsystemsolver
 fi
 if [ ! -f $mainEX ]; then
 	echo "File $mainEX does not exist! Exiting............"
