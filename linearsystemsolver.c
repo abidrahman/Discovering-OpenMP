@@ -11,3 +11,7 @@
 
 void validate_input_args(int argc, char **argv) {}
 void print_usage() {}
+
+int main(int argc, char *argv[]) {
+    return 0; 
+}
