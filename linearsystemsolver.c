@@ -30,21 +30,16 @@ int main(int argc, char *argv[]) {
     validate_input_args(argc, argv);
 
     // Allocate memory and load the input data for Lab 3
-    double** A; 
-    double* X; 
-    int size; 
     Lab3LoadInput(&A, &size);
     X = CreateVec(size);
 
     // Assign indices with open mp
-    int *indices;
     indices = malloc(size * sizeof(int));
     #pragma omp for
     for (int i = 0; i < size; ++i)
         indices[i] = i;
 
     // Solve linear systems of equations
-    double start, end;
     GET_TIME(start);
     GET_TIME(end);
 

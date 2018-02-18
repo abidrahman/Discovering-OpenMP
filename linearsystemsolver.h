@@ -16,7 +16,17 @@
 #include "./dependencies/Lab3IO.h"
 #include "./dependencies/timer.h"
 
+// For threads
 int thread_count; 
+
+// For memory and data
+double **A;
+double *X;
+int size;
+int *indices;
+
+// For time
+double start, end;
 
 void validate_input_args(int argc, char **argv);
 void print_usage();
