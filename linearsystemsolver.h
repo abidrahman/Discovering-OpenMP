@@ -30,5 +30,6 @@ double start, end;
 
 void validate_input_args(int argc, char **argv);
 void print_usage();
+void solve_linear_systems_of_equations(); 
 
 #endif

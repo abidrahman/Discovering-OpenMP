@@ -23,6 +23,10 @@ void validate_input_args(int argc, char **argv) {
 void print_usage() {
     printf("USAGE: server <number_of_threads> \n");
 }
+void solve_linear_systems_of_equations() {
+    GET_TIME(start);
+    GET_TIME(end);
+}
 
 int main(int argc, char *argv[]) {
 
@@ -40,8 +44,7 @@ int main(int argc, char *argv[]) {
         indices[i] = i;
 
     // Solve linear systems of equations
-    GET_TIME(start);
-    GET_TIME(end);
+    solve_linear_systems_of_equations(); 
 
     // Save memory and output data 
     Lab3SaveOutput(X, size, (end - start));
