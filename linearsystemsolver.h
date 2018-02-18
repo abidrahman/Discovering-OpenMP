@@ -14,6 +14,8 @@
 #include <stdlib.h>
 #include <omp.h>
 
+int thread_count; 
+
 void validate_input_args(int argc, char **argv);
 void print_usage();
 
