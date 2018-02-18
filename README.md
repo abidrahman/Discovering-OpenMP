@@ -1,25 +1,19 @@
 # ECE420Lab3
 
-1. Implement a multithreaded server that can handle multiple simultaneous incoming
-TCP connections from client threads. The server must communicate
-with clients via stream sockets, as shown in the sample code.
+1. Use the scripts in “Development Kit Lab 3” to generate input data, load
+data and save results. Refer to the ReadMe file for details on how to use
+them.
 
-2. Maintain an array of n strings, char** theArray, in the memory of the
-server, where each string i (i = 0, 1, 2, . . . , n − 1) is filled with the initial
-value “String i: the initial value”.
+2. Time measurement should be implemented.
 
-3. Implement a client program that can launch x simultaneous write/read requests
-to the server. Each request is launched in a separate Pthread and
-performs either a read or a write operation to a random string in theArray
-on the server. For a read request, the server returns the requested string to
-the user. For a write request, the requesting thread will update the corresponding
-string in theArray on the server to the following: “String pos has
-been modified by a write request”, where pos is the id of the string that is
-updated. Each request is a write operation with a probability of 5% and is
-a read operation with a probability of 95%.
+3. The number of threads should be passed as the only command line argument
+to your program.
 
-4. For a read request, the server will send the requested string back to the
-requesting client thread. Upon receiving the string, the client thread will
-display it, close the connection and terminate. For a write request, the
-server will send the updated string back to the client. Upon receiving the
-string, the client thread will display it, close the connection and terminate.
+4. Optimize the performance of your implementation as much as possible using
+the techniques learned in class.
+
+5. You don’t need to consider the singular cases, i.e., a linear system with
+no solution or an infinite number of solutions. The input data generated
+by “datagen.c” will avoid such cases. You do need to include the partial
+pivoting procedure in your code to make the computed results correct and
+numerically stable.
