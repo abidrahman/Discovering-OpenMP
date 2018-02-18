@@ -13,6 +13,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
+#include "./dependencies/Lab3IO.h"
 
 int thread_count; 
 

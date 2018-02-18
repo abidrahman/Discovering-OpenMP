@@ -29,5 +29,12 @@ int main(int argc, char *argv[]) {
     // Valdiate port num and num strings
     validate_input_args(argc, argv);
 
+    // Allocate memory and load the input data for Lab 3
+    double** A; 
+    double* X; 
+    int size; 
+    Lab3LoadInput(&A, &size);
+    X = CreateVec(size);
+
     return 0; 
 }

@@ -1,1 +1,4 @@
 *.o
+dependencies/datagen
+dependencies/data_input
+dependencies/data_output
