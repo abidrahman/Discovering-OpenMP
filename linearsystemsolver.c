@@ -36,5 +36,16 @@ int main(int argc, char *argv[]) {
     Lab3LoadInput(&A, &size);
     X = CreateVec(size);
 
+    // Solve linear systems of equations
+    double start, end;
+    GET_TIME(start);
+    GET_TIME(end);
+
+    // Save memory and output data 
+    Lab3SaveOutput(X, size, (end - start));
+    DestroyVec(X);
+    DestroyMat(A, size);
+    free(indices);
+
     return 0; 
 }

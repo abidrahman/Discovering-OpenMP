@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <omp.h>
 #include "./dependencies/Lab3IO.h"
+#include "./dependencies/timer.h"
 
 int thread_count; 
 
