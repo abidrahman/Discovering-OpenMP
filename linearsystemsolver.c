@@ -36,6 +36,13 @@ int main(int argc, char *argv[]) {
     Lab3LoadInput(&A, &size);
     X = CreateVec(size);
 
+    // Assign indices with open mp
+    int *indices;
+    indices = malloc(size * sizeof(int));
+    #pragma omp for
+    for (int i = 0; i < size; ++i)
+        indices[i] = i;
+
     // Solve linear systems of equations
     double start, end;
     GET_TIME(start);

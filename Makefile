@@ -6,7 +6,6 @@ all: createdata solver
 
 solver: linearsystemsolver.c dependencies/Lab3IO.c
 	gcc-7 $^ $(CFLAGSopenMP) -o solver.o
-	@# $(CC) $^ $(CFLAGS) -o solver.o
 
 createdata: dependencies/datagen.c dependencies/Lab3IO.c 
 	@gcc $^ -o dependencies/datagen
