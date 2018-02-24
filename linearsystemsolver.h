@@ -20,10 +20,10 @@
 int thread_count; 
 
 // For memory and data
-double **A;
-double *X;
 int size;
-int *indices;
+double **Au;
+double *X;
+int *index;
 
 // For time
 double start, end;
