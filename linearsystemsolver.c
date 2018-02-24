@@ -38,24 +38,24 @@ void solve_linear_systems_of_equations() {
 //             /*Pivoting*/
 //             int temp = 0;
 //             for (i = k, j = 0; i < size; ++i)
-//                 if (temp < Au[index[i]][k] * Au[index[i]][k])
+//                 if (temp < Au[indices[i]][k] * Au[indices[i]][k])
 //                 {
-//                     temp = Au[index[i]][k] * Au[index[i]][k];
+//                     temp = Au[indices[i]][k] * Au[indices[i]][k];
 //                     j = i;
 //                 }
 //             if (j != k) /*swap*/
 //             {
-//                 i = index[j];
-//                 index[j] = index[k];
-//                 index[k] = i;
+//                 i = indices[j];
+//                 indices[j] = indices[k];
+//                 indices[k] = i;
 //             }
 //                 /*calculating*/
-//            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size) private(i, j, temp)
+//            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp)
 //             for (i = k + 1; i < size; ++i)
 //             {
-//                 temp = Au[index[i]][k] / Au[index[k]][k];
+//                 temp = Au[indices[i]][k] / Au[indices[k]][k];
 //                 for (j = k; j < size + 1; ++j)
-//                     Au[index[i]][j] -= Au[index[k]][j] * temp;
+//                     Au[indices[i]][j] -= Au[indices[k]][j] * temp;
 //             }
 //         }
 //         /*Jordan elimination*/
@@ -63,14 +63,14 @@ void solve_linear_systems_of_equations() {
 //         {
 //             for (i = k - 1; i >= 0; --i)
 //             {
-//                 temp = Au[index[i]][k] / Au[index[k]][k];
-//                 Au[index[i]][k] -= temp * Au[index[k]][k];
-//                 Au[index[i]][size] -= temp * Au[index[k]][size];
+//                 temp = Au[indices[i]][k] / Au[indices[k]][k];
+//                 Au[indices[i]][k] -= temp * Au[indices[k]][k];
+//                 Au[indices[i]][size] -= temp * Au[indices[k]][size];
 //             }
 //         }
 //         /*solution*/
 //         for (k = 0; k < size; ++k)
-//             X[k] = Au[index[k]][size] / Au[index[k]][k];
+//             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
 //     }
     GET_TIME(end);
 }
@@ -87,11 +87,11 @@ int main(int argc, char *argv[]) {
     Lab3LoadInput(&Au, &size);
     X = CreateVec(size);
 
-    // Assign index with open mp
-    index = malloc(size * sizeof(int));
+    // Assign indices with open mp
+    indices = malloc(size * sizeof(int));
     #pragma omp for
     for (int i = 0; i < size; ++i)
-        index[i] = i;
+        indices[i] = i;
 
     // Solve linear systems of equations
     solve_linear_systems_of_equations(); 
@@ -100,7 +100,7 @@ int main(int argc, char *argv[]) {
     Lab3SaveOutput(X, size, (end - start));
     DestroyVec(X);
     DestroyMat(Au, size);
-    free(index);
+    free(indices);
 
     return 0; 
 }

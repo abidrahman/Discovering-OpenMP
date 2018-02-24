@@ -23,7 +23,7 @@ int thread_count;
 int size;
 double **Au;
 double *X;
-int *index;
+int *indices;
 
 // For time
 double start, end;
