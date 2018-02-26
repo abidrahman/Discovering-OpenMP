@@ -108,7 +108,8 @@ int main(int argc, char *argv[]) {
 
     // Assign indices with open mp
     indices = malloc(size * sizeof(int));
-  #  pragma omp for
+    
+    # pragma omp for
     for (int i = 0; i < size; ++i)
         indices[i] = i;
 
