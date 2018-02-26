@@ -77,7 +77,7 @@ void solve_linear_systems_of_equations() {
         int temp; 
         int i; 
 
-        # pragma omp parallel for private(temp)	 
+        //# pragma omp parallel for private(temp)	 
         for (i = k - 1; i >= 0; --i) {
             temp = Au[indices[i]][k] / Au[indices[k]][k];
             Au[indices[i]][k] -= temp * Au[indices[k]][k];
