@@ -26,22 +26,26 @@ void print_usage() {
 void solve_linear_systems_of_equations() {
     GET_TIME(start);
 
-    // Gaussian elimination
-    for (int k = 0; k < size - 1; ++k) {
+#pragma omp parallel
+    for (int k = 0; k < size - 1; ++k)
+    {
 
-        #pragma omp single
+#pragma omp single
         {
             int temp = 0;
             int j = 0;
             int i;
 
-            // #pragma omp parallel for private(i)
-            for (i = k; i < size; ++i) {
-                if (temp < Au[indices[i]][k] * Au[indices[i]][k]) {
+#pragma omp parallel for private(i)
+            for (i = k; i < size; ++i)
+            {
+                if (temp < Au[indices[i]][k] * Au[indices[i]][k])
+                {
 
-                    #pragma omp critical
+#pragma omp critical
                     {
-                        if (temp < Au[indices[i]][k] * Au[indices[i]][k]) {
+                        if (temp < Au[indices[i]][k] * Au[indices[i]][k])
+                        {
                             temp = Au[indices[i]][k] * Au[indices[i]][k];
                             j = i;
                         }
@@ -50,19 +54,22 @@ void solve_linear_systems_of_equations() {
             }
 
             // Swap
-            if (j != k) {
+            if (j != k)
+            {
                 int i = indices[j];
                 indices[j] = indices[k];
                 indices[k] = i;
             }
 
-            // calculation step
-            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp)
-            for (i = k + 1; i < size; ++i) {
+// calculation step
+#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp)
+            for (i = k + 1; i < size; ++i)
+            {
                 int temp = Au[indices[i]][k] / Au[indices[k]][k];
 
-                // #pragma omp parallel for private(j)
-                for (j = k; j < size + 1; ++j) {
+#pragma omp parallel for private(j)
+                for (j = k; j < size + 1; ++j)
+                {
                     Au[indices[i]][j] -= Au[indices[k]][j] * temp;
                 }
             }
@@ -70,20 +77,23 @@ void solve_linear_systems_of_equations() {
     }
 
     // Jordan elimination
-    for (int k = size - 1; k > 0; --k) {
+    for (int k = size - 1; k > 0; --k)
+    {
         int temp;
         int i;
 
-        #pragma omp parallel for private(temp)
-        for (i = k - 1; i >= 0; --i) {
+#pragma omp parallel for private(temp)
+        for (i = k - 1; i >= 0; --i)
+        {
             temp = Au[indices[i]][k] / Au[indices[k]][k];
             Au[indices[i]][k] -= temp * Au[indices[k]][k];
             Au[indices[i]][size] -= temp * Au[indices[k]][size];
         }
     }
 
-    #pragma omp parallel for
-    for (int k = 0; k < size; ++k) {
+#pragma omp parallel for
+    for (int k = 0; k < size; ++k)
+    {
         X[k] = Au[indices[k]][size] / Au[indices[k]][k];
         // printf("%e\n", X[k]);
     }
