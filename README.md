@@ -1,6 +1,6 @@
 Repository for ECE 420 Lab 3
 
-### Goal: explore speed of using the open mp standard of threads
+### Goal: explore the use and speed of open mp threads
 
 ![alt text](logfiles/results.png "Server-Side Average Memory Access Latency")
 

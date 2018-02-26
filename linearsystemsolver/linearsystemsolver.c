@@ -27,7 +27,7 @@ void solve_linear_systems_of_equations() {
     GET_TIME(start);
 
     // Gaussian elimination
-    //# pragma omp parallel
+    // # pragma omp parallel for
  	for (int k = 0; k < size - 1; ++k) {
     
         # pragma omp single
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     // Assign indices with open mp
     indices = malloc(size * sizeof(int));
     
-    # pragma omp for
+    # pragma omp parallel for
     for (int i = 0; i < size; ++i)
         indices[i] = i;
 
