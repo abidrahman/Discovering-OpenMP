@@ -20,4 +20,6 @@ labmachinesolver: linearsystemsolver/linearsystemsolver.c dependencies/Lab3IO.c
 clean:
 	@rm -rf *.o
 	@rm -rf dependencies/datagen
+	@rm -rf logfiles/data_input
+	@rm -rf logfiles/data_output
 

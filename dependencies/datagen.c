@@ -55,7 +55,7 @@ int main (int argc, char* argv[]){
     double **A, **T, **S;
     double *b;
     double temp;
-    char *OUTPATH = "dependencies/data_input";
+    char *OUTPATH = "logfiles/data_input";
     FILE* fp;
 
     srand(time(NULL));

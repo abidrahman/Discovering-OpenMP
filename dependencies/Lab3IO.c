@@ -28,7 +28,7 @@ int Lab3LoadInput(double ***A, int *size){
     FILE* ip;
     int i,j;
 
-    if ((ip = fopen("dependencies/data_input","r")) == NULL){
+    if ((ip = fopen("logfiles/data_input","r")) == NULL){
             printf("error opening the input data.\n");
             return 1;
     }
@@ -68,7 +68,7 @@ int Lab3SaveOutput(double* x, int size, double Time){
     FILE* op;
     int i;
 
-    if ((op = fopen("dependencies/data_output", "w")) == NULL)
+    if ((op = fopen("logfiles/data_output", "w")) == NULL)
     {
         printf("Error opening the output file.\n");
         return 1;

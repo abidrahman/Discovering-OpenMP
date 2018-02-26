@@ -1,4 +1,4 @@
 *.o
 dependencies/datagen
-dependencies/data_input
-dependencies/data_output
+logfiles/data_input
+logfiles/data_output

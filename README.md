@@ -1,19 +1,32 @@
-# ECE420Lab3
+Repository for ECE 420 Lab 3
 
-1. Use the scripts in “Development Kit Lab 3” to generate input data, load
-data and save results. Refer to the ReadMe file for details on how to use
-them.
+### Goal: explore speed of using the open mp standard of threads
 
-2. Time measurement should be implemented.
+![alt text](logfiles/results.png "Server-Side Average Memory Access Latency")
 
-3. The number of threads should be passed as the only command line argument
-to your program.
 
-4. Optimize the performance of your implementation as much as possible using
-the techniques learned in class.
+### Build instructions 
 
-5. You don’t need to consider the singular cases, i.e., a linear system with
-no solution or an infinite number of solutions. The input data generated
-by “datagen.c” will avoid such cases. You do need to include the partial
-pivoting procedure in your code to make the computed results correct and
-numerically stable.
+To make on the lab machine: 
+ - `$ make createdata`
+ - `$ make`
+
+To make on MacOS X:
+(ensure gcc-7 installed, instructions here: http://www.mathcancer.org/blog/setting-up-gcc-openmp-on-osx-homebrew-edition/)
+ - `$ make createdata`
+ - `$ make solver`
+
+
+### Run instructions
+
+To run client:
+ - `$ ./solver.o <num_threads>`
+
+
+### Data output 
+
+Data output is automattically placed as logfiles/data_output. Change the name of this file to preserve it, else it will be overwritten the next time the program is run. 
+
+Data input is also automattically placed in the logfiles folder as logfiles/data_input. 
+
+Make clean will remove the default data_output and data_input files
