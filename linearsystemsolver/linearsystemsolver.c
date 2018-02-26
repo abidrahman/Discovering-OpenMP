@@ -31,16 +31,16 @@ void solve_linear_systems_of_equations() {
     for (int k = 0; k < size - 1; ++k)
     {
 
-        # pragma omp single
+        // # pragma omp single
         {
-            int temp, j = 0;
-            int i, temp2, temp3;
+            int j = 0;
+            int i, temp; 
 
             // # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
             for (i = k; i < size; ++i) {
                 temp = 0;
 
-                # pragma omp critical
+                // # pragma omp critical
                 { 
                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
                         temp = Au[indices[i]][k] * Au[indices[i]][k];
@@ -51,13 +51,14 @@ void solve_linear_systems_of_equations() {
 
             // Swap
             if (j != k) {
-                temp2 = indices[j];
+                int temp2 = indices[j];
                 indices[j] = indices[k];
                 indices[k] = temp2;
             }
             
             // calculation step
-            # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp3) schedule (static, 10)
+            int temp3; 
+            // # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp3) schedule (static, 10)
             for (i = k + 1; i < size; ++i) {
                 temp3 = Au[indices[i]][k] / Au[indices[k]][k];
 
@@ -75,7 +76,7 @@ void solve_linear_systems_of_equations() {
     for (int k = size - 1; k > 0; --k) {
         int temp, i; 
 
-        # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)	 
+        // # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)	 
         for (i = k - 1; i >= 0; --i) {
             temp = Au[indices[i]][k] / Au[indices[k]][k];
             Au[indices[i]][k] -= temp * Au[indices[k]][k];
@@ -83,7 +84,7 @@ void solve_linear_systems_of_equations() {
         } 
     }
         
-    # pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, indices) private(k) schedule (static, 10)
+    // # pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, indices) private(k) schedule (static, 10)
     for (k=0; k < size; ++k) {
         X[k] = Au[indices[k]][size] / Au[indices[k]][k];
         // printf("%e\n", X[k]);
