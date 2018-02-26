@@ -30,6 +30,8 @@ void solve_linear_systems_of_equations() {
     # pragma omp parallel
  	for (int k = 0; k < size - 1; ++k) {
     
+        # pragma omp single
+        {
             int temp = 0;
             int j = 0;
             int i; 
@@ -65,6 +67,7 @@ void solve_linear_systems_of_equations() {
                     Au[indices[i]][j] -= Au[indices[k]][j] * temp;
                 }
             }
+        }
  	}
     
     
