@@ -27,17 +27,17 @@ void solve_linear_systems_of_equations() {
     GET_TIME(start);
 
     // Gaussian elimination
-//#  pragma omp parallel
+#  pragma omp parallel
  	for (int k = 0; k < size - 1; ++k) {
     
 //#      pragma omp single
  	    int temp = 0;
  	    int j = 0;
 	    int i; 
-//#      pragma omp parallel for private(i)
+#           pragma omp parallel for private(i)
  	    for (i = k; i < size; ++i) {
  	       if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-//#                pragma omp critical
+#               pragma omp critical
                 { 
                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
                         temp = Au[indices[i]][k] * Au[indices[i]][k];
@@ -56,9 +56,8 @@ void solve_linear_systems_of_equations() {
         
  	    // calculation step
 //#      pragma omp parallel for private(i,temp,j)
-#       pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp)
-        int i; 
- 	    for (i = k + 1; i < size; ++i) {
+#       pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp) 
+ 	for (i = k + 1; i < size; ++i) {
  	        int temp = Au[indices[i]][k] / Au[indices[k]][k];
  	        for (j = k; j < size + 1; ++j) {
  	            Au[indices[i]][j] -= Au[indices[k]][j] * temp;
@@ -68,16 +67,18 @@ void solve_linear_systems_of_equations() {
     
     // Jordan elimination
      for (int k = size - 1; k > 0; --k) {
-//#      pragma omp parallel for private(temp)	
-         for (int i = k - 1; i >= 0; --i) {
-             int temp = Au[indices[i]][k] / Au[indices[k]][k];
+	 int temp; 
+	 int i; 
+#        pragma omp parallel for private(temp)	 
+	 for (i = k - 1; i >= 0; --i) {
+             temp = Au[indices[i]][k] / Au[indices[k]][k];
              Au[indices[i]][k] -= temp * Au[indices[k]][k];
              Au[indices[i]][size] -= temp * Au[indices[k]][size];
          } 
      }
         
 
-//# 	pragma omp parallel for
+#   pragma omp parallel for
     for (int k=0; k< size; ++k) {
         X[k] = Au[indices[k]][size] / Au[indices[k]][k];
         // printf("%e\n", X[k]);
