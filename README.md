@@ -12,7 +12,7 @@ To make on the lab machine:
  - `$ make`
 
 To make on MacOS X:
-(ensure gcc-7 installed, instructions here: http://www.mathcancer.org/blog/setting-up-gcc-openmp-on-osx-homebrew-edition/)
+(ensure gcc-7, [instructions](http://www.mathcancer.org/blog/setting-up-gcc-openmp-on-osx-homebrew-edition/))
  - `$ make createdata`
  - `$ make solver`
 
@@ -25,8 +25,8 @@ To run client:
 
 ### Data output 
 
-Data output is automattically placed as logfiles/data_output. Change the name of this file to preserve it, else it will be overwritten the next time the program is run. 
+Data output is automattically placed as `logfiles/data_output`. Change the name of this file to preserve it, else it will be overwritten the next time the program is run. 
 
-Data input is also automattically placed in the logfiles folder as logfiles/data_input. 
+Data input is also automattically placed in the logfiles folder as `logfiles/data_input`. 
 
-Make clean will remove the default data_output and data_input files
+Make clean will remove the default `data_output` and `data_input` files
