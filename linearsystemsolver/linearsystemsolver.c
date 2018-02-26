@@ -33,11 +33,11 @@ void solve_linear_systems_of_equations() {
 
         // # pragma omp single
         {
-            int i, j;
-            int temp = 0;
+            int i;
+            int temp, j = 0;
 
             // # pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
-            for (i = k, j = 0; i < size; ++i) {
+            for (i = k; i < size; ++i) {
                 # pragma omp critical
                 {
                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]) {
