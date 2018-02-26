@@ -27,7 +27,7 @@ void solve_linear_systems_of_equations() {
     GET_TIME(start);
 
     // Gaussian elimination
-    # pragma omp parallel
+    //# pragma omp parallel
  	for (int k = 0; k < size - 1; ++k) {
     
         # pragma omp single
@@ -36,7 +36,7 @@ void solve_linear_systems_of_equations() {
             int j = 0;
             int i; 
 
-            # pragma omp parallel for private(i)
+            //# pragma omp parallel for private(i)
             for (i = k; i < size; ++i) {
                 if (temp < Au[indices[i]][k] * Au[indices[i]][k]) {
 
@@ -62,7 +62,7 @@ void solve_linear_systems_of_equations() {
             for (i = k + 1; i < size; ++i) {
                 int temp = Au[indices[i]][k] / Au[indices[k]][k];
                 
-                #pragma omp parallel for private(j)
+                //#pragma omp parallel for private(j)
                 for (j = k; j < size + 1; ++j) {
                     Au[indices[i]][j] -= Au[indices[k]][j] * temp;
                 }
@@ -72,6 +72,7 @@ void solve_linear_systems_of_equations() {
     
     
     // Jordan elimination
+    # pragma omp parallel for
     for (int k = size - 1; k > 0; --k) {
         int temp; 
         int i; 
