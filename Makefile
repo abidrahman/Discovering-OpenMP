@@ -14,7 +14,7 @@ createdata: dependencies/datagen.c dependencies/Lab3IO.c
 .DEFAULT_GOAL := labmachinesolver
 
 labmachinesolver: linearsystemsolver.c dependencies/Lab3IO.c
-	gcc $^ $(CFLAGSopenMP) -o solver.o
+	gcc linearsystemsolver.c dependencies/Lab3IO.c -g -Wall -fopenmp -lm -std=c99 -o solver.o
 
 clean:
 	@rm -rf *.o

@@ -33,11 +33,11 @@ void solve_linear_systems_of_equations() {
 //#      pragma omp single
  	    int temp = 0;
  	    int j = 0;
-	    int i = 0; 
-//      # pragma omp parallel for private(i)
+	    int i; 
+//#      pragma omp parallel for private(i)
  	    for (i = k; i < size; ++i) {
  	       if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-                # pragma omp critical
+//#                pragma omp critical
                 { 
                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
                         temp = Au[indices[i]][k] * Au[indices[i]][k];
@@ -56,8 +56,9 @@ void solve_linear_systems_of_equations() {
         
  	    // calculation step
 //#      pragma omp parallel for private(i,temp,j)
-#       pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size) private(i, j, temp)
- 	    for (int i = k + 1; i < size; ++i){
+#       pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, j, temp)
+        int i; 
+ 	    for (i = k + 1; i < size; ++i) {
  	        int temp = Au[indices[i]][k] / Au[indices[k]][k];
  	        for (j = k; j < size + 1; ++j) {
  	            Au[indices[i]][j] -= Au[indices[k]][j] * temp;
