@@ -26,62 +26,60 @@ void print_usage() {
 void solve_linear_systems_of_equations() {
     GET_TIME(start);
 
-    // BASELINE SOLUTION: 
-    // NEED TO ENSURE OPENMP WORKS FIRST
-
-  /*Gaussian elimination*/
-    // SHOULD ADD AN OMP BEFORE FOR LOOP: #pragma omp parallel
+    // Gaussian elimination
+//#  pragma omp parallel
  	for (int k = 0; k < size - 1; ++k) {
     
-    // CAN HAVE AN OMP SINGLE ENCOMPASING REST OF GAUSSIAN ELIM #pragma omp single
- 	    /*Pivoting*/
+//#      pragma omp single
  	    int temp = 0;
  	    int j = 0;
 	    int i = 0; 
- 	    # pragma omp parallel for private(i)
+//      # pragma omp parallel for private(i)
  	    for (i = k; i < size; ++i) {
  	       if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-                  # pragma omp critical
-                  { 
-                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-                         temp = Au[indices[i]][k] * Au[indices[i]][k];
-                         j = i;
-                     }
-                  }
- 		}
-            }
+                # pragma omp critical
+                { 
+                    if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
+                        temp = Au[indices[i]][k] * Au[indices[i]][k];
+                        j = i;
+                    }
+                }
+ 		    }
+        }
 
-
- 	    if (j != k)/*swap*/{
+        // Swap
+ 	    if (j != k){
  			int i = indices[j];
  			indices[j] = indices[k];
  			indices[k] = i;
  	    }
         
- 	    /*calculating*/
-// 	    #pragma omp parallel for private(i,temp,j)
+ 	    // calculation step
+//#      pragma omp parallel for private(i,temp,j)
+#       pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size) private(i, j, temp)
  	    for (int i = k + 1; i < size; ++i){
  	        int temp = Au[indices[i]][k] / Au[indices[k]][k];
  	        for (j = k; j < size + 1; ++j) {
  	            Au[indices[i]][j] -= Au[indices[k]][j] * temp;
  			}
- 	    }   
+ 	    }
  	}
-     /*Jordan elimination*/
-    // CAN HAVE AN OMP PARALLEL BEFORE THIS FOR LOOP TOO
-     for (int k = size - 1; k > 0; --k){
-//      #pragma omp parallel for private(temp)	
-         for (int i = k - 1; i >= 0; --i ){
+    
+    // Jordan elimination
+     for (int k = size - 1; k > 0; --k) {
+//#      pragma omp parallel for private(temp)	
+         for (int i = k - 1; i >= 0; --i) {
              int temp = Au[indices[i]][k] / Au[indices[k]][k];
              Au[indices[i]][k] -= temp * Au[indices[k]][k];
              Au[indices[i]][size] -= temp * Au[indices[k]][size];
          } 
      }
-         /*solution*/
-// 	#pragma omp parallel for
-         for (int k=0; k< size; ++k) {
-             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
- 	    printf("%e\n", X[k]);
+        
+
+//# 	pragma omp parallel for
+    for (int k=0; k< size; ++k) {
+        X[k] = Au[indices[k]][size] / Au[indices[k]][k];
+        // printf("%e\n", X[k]);
  	}
 
     GET_TIME(end);
@@ -101,7 +99,7 @@ int main(int argc, char *argv[]) {
 
     // Assign indices with open mp
     indices = malloc(size * sizeof(int));
-    #pragma omp for
+  #  pragma omp for
     for (int i = 0; i < size; ++i)
         indices[i] = i;
 
