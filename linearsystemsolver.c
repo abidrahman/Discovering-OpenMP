@@ -29,59 +29,60 @@ void solve_linear_systems_of_equations() {
     // BASELINE SOLUTION: 
     // NEED TO ENSURE OPENMP WORKS FIRST
 
-//  /*Gaussian elimination*/
+  /*Gaussian elimination*/
     // SHOULD ADD AN OMP BEFORE FOR LOOP: #pragma omp parallel
-// 	for (int k = 0; k < size - 1; ++k) {
+ 	for (int k = 0; k < size - 1; ++k) {
     
     // CAN HAVE AN OMP SINGLE ENCOMPASING REST OF GAUSSIAN ELIM #pragma omp single
-// 	    /*Pivoting*/
-// 	    int temp = 0;
-// 	    int j = 0;
-// 	    # pragma omp parallel for private(i)
-// 	    for (int i = k; i < size; ++i) {
-// 	       if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-//                  # pragma omp critical
-//                  { 
-//                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
-//                         temp = Au[indices[i]][k] * Au[indices[i]][k];
-//                         j = i;
-//                     }
-//                  }
-// 			}
-//         }
+ 	    /*Pivoting*/
+ 	    int temp = 0;
+ 	    int j = 0;
+	    int i = 0; 
+ 	    # pragma omp parallel for private(i)
+ 	    for (i = k; i < size; ++i) {
+ 	       if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
+                  # pragma omp critical
+                  { 
+                     if (temp < Au[indices[i]][k] * Au[indices[i]][k]){
+                         temp = Au[indices[i]][k] * Au[indices[i]][k];
+                         j = i;
+                     }
+                  }
+ 		}
+            }
 
 
-// 	    if (j != k)/*swap*/{
-// 			int i = indices[j];
-// 			indices[j] = indices[k];
-// 			indices[k] = i;
-// 	    }
+ 	    if (j != k)/*swap*/{
+ 			int i = indices[j];
+ 			indices[j] = indices[k];
+ 			indices[k] = i;
+ 	    }
         
-// 	    /*calculating*/
+ 	    /*calculating*/
 // 	    #pragma omp parallel for private(i,temp,j)
-// 	    for (int i = k + 1; i < size; ++i){
-// 	        temp = Au[indices[i]][k] / Au[indices[k]][k];
-// 	        for (j = k; j < size + 1; ++j) {
-// 	            Au[indices[i]][j] -= Au[indices[k]][j] * temp;
-// 			}
-// 	    }   
-// 	}
-//     /*Jordan elimination*/
+ 	    for (int i = k + 1; i < size; ++i){
+ 	        int temp = Au[indices[i]][k] / Au[indices[k]][k];
+ 	        for (j = k; j < size + 1; ++j) {
+ 	            Au[indices[i]][j] -= Au[indices[k]][j] * temp;
+ 			}
+ 	    }   
+ 	}
+     /*Jordan elimination*/
     // CAN HAVE AN OMP PARALLEL BEFORE THIS FOR LOOP TOO
-//     for (int k = size - 1; k > 0; --k){
+     for (int k = size - 1; k > 0; --k){
 //      #pragma omp parallel for private(temp)	
-//         for (int i = k - 1; i >= 0; --i ){
-//             temp = Au[indices[i]][k] / Au[indices[k]][k];
-//             Au[indices[i]][k] -= temp * Au[indices[k]][k];
-//             Au[indices[i]][size] -= temp * Au[indices[k]][size];
-//         } 
-//     }
-//         /*solution*/
+         for (int i = k - 1; i >= 0; --i ){
+             int temp = Au[indices[i]][k] / Au[indices[k]][k];
+             Au[indices[i]][k] -= temp * Au[indices[k]][k];
+             Au[indices[i]][size] -= temp * Au[indices[k]][size];
+         } 
+     }
+         /*solution*/
 // 	#pragma omp parallel for
-//         for (int k=0; k< size; ++k) {
-//             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
-// 	    printf("%e\n", X[k]);
-// 	}
+         for (int k=0; k< size; ++k) {
+             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
+ 	    printf("%e\n", X[k]);
+ 	}
 
     GET_TIME(end);
 }
@@ -92,7 +93,7 @@ int main(int argc, char *argv[]) {
     validate_input_args(argc, argv);
 
     // Set thread number
-    // omp_set_num_threads(thread_count);
+    omp_set_num_threads(thread_count);
 
     // Allocate memory and load the input data for Lab 3
     Lab3LoadInput(&Au, &size);
