@@ -34,14 +34,22 @@ void solve_linear_systems_of_equations()
         /*Gaussian elimination*/
         for (k = 0; k < size - 1; ++k)
         {
+            // #pragma omp single
+            // {
+
             /*Pivoting*/
             temp = 0;
+            // #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
             for (i = k, j = 0; i < size; ++i)
+                // #pragma omp critical
+                // {
                 if (temp < Au[indices[i]][k] * Au[indices[i]][k])
                 {
                     temp = Au[indices[i]][k] * Au[indices[i]][k];
                     j = i;
                 }
+                // }
+
             if (j != k) /*swap*/
             {
                 i = indices[j];
@@ -53,13 +61,17 @@ void solve_linear_systems_of_equations()
             for (i = k + 1; i < size; ++i)
             {
                 temp = Au[indices[i]][k] / Au[indices[k]][k];
+                //#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(j)
                 for (j = k; j < size + 1; ++j)
                     Au[indices[i]][j] -= Au[indices[k]][j] * temp;
             }
+            // }
         }
         /*Jordan elimination*/
+        // #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(k)
         for (k = size - 1; k > 0; --k)
         {
+            // #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
             for (i = k - 1; i >= 0; --i)
             {
                 temp = Au[indices[i]][k] / Au[indices[k]][k];
@@ -68,6 +80,7 @@ void solve_linear_systems_of_equations()
             }
         }
         /*solution*/
+        // #pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, indices) private(k) schedule (static, 10)
         for (k = 0; k < size; ++k)
             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
     }
