@@ -68,7 +68,7 @@ void solve_linear_systems_of_equations() {
     // #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(k)
     for (k = size - 1; k > 0; --k) {
         // #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
-        for (i = k - 1; i >= 0; --i) {
+        for (i = k; i < size; ++i) {
             temp = Au[indices[i]][k] / Au[indices[k]][k];
             Au[indices[i]][k] -= temp * Au[indices[k]][k];
             Au[indices[i]][size] -= temp * Au[indices[k]][size];
