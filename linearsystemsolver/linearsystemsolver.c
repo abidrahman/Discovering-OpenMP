@@ -39,7 +39,7 @@ void solve_linear_systems_of_equations()
 
             /*Pivoting*/
             temp = 0;
-            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp)
+            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp, j)
             for (i = k, j = 0; i < size; ++i) {
                 if (temp < Au[indices[i]][k] * Au[indices[i]][k])
                 {
