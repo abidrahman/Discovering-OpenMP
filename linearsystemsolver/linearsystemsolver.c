@@ -34,13 +34,11 @@ void solve_linear_systems_of_equations()
         /*Gaussian elimination*/
         for (k = 0; k < size - 1; ++k)
         {
-            // #pragma omp single
-            // {
-
             /*Pivoting*/
             temp = 0;
+            j = 0;
             #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, indices, k, size) private(i, temp, j)
-            for (i = k, j = 0; i < size; ++i) {
+            for (i = k; i < size; ++i) {
                 if (temp < Au[indices[i]][k] * Au[indices[i]][k])
                 {
                     temp = Au[indices[i]][k] * Au[indices[i]][k];
