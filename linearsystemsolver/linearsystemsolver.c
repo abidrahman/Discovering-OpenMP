@@ -2,7 +2,14 @@
 
 int main(int argc, char *argv[])
 {
-    thread_count = 2; 
+    if (argc > 2 || argc <= 1)
+    {	 
+        printf("Incorrect number of arguments.\n");
+        exit(EXIT_FAILURE);	
+    }	
+ 	 
+    //Get inputs from the user	+    /*Calculate the solution by serial code*/
+    thread_count = atoi(argv[1]);
 
     /*Calculate the solution by serial code*/
     Lab3LoadInput(&Au, &size);
@@ -79,6 +86,8 @@ void solve_linear_systems_of_equations()
         /*solution*/
         #pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, indices) private(k) schedule (static, 10)
         for (k = 0; k < size; ++k)
+        {
             X[k] = Au[indices[k]][size] / Au[indices[k]][k];
+        }
     }
 }
