@@ -13,8 +13,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#include "./../dependencies/Lab3IO.h"
-#include "./../dependencies/timer.h"
+#include "Lab3IO.h"
+#include "timer.h"
 
 // For threads
 int thread_count; 

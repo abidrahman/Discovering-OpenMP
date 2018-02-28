@@ -1,32 +1,29 @@
 Repository for ECE 420 Lab 3
 
-### Goal: explore the use and speed of open mp threads
-
-![alt text](logfiles/results.png "Server-Side Average Memory Access Latency")
-
+### Goal: Explore openmp multithreading and compare the speed of different pragma operations
+### In order to do so, we solve a linear system of equations via Gauss-Jordan elimination
 
 ### Build instructions 
 
-To make on the lab machine: 
- - `$ make createdata`
- - `$ make`
+To make: 
+ - `$ make all`
 
-To make on MacOS X:
-(ensure gcc-7, [instructions](http://www.mathcancer.org/blog/setting-up-gcc-openmp-on-osx-homebrew-edition/))
- - `$ make createdata`
- - `$ make solver`
-
+There are three components to this project:
+1) Datagen
+    - Generates the input data for the program
+2) Serialtester
+    - Has the correct serial implementation of a gauss-jordan solver
+    - Used to test the correctness of the multithreaded solution
+3) LinearSystemSolver
+    - Includes the multithreaded solution via openmp
 
 ### Run instructions
 
-To run client:
- - `$ ./solver.o <num_threads>`
+A bash script is provided to quickly run and test the multithreaded solution with the following parameters:
+ - Input size of the data: 64, 256, 1024
+ - Number of threads: 1, 4, 16 
+ - Duplicates (amount of times each trial is run): 4
 
+To run the script:
+ - `./check.sh`
 
-### Data output 
-
-Data output is automattically placed as `logfiles/data_output`. Change the name of this file to preserve it, else it will be overwritten the next time the program is run. 
-
-Data input is also automattically placed in the logfiles folder as `logfiles/data_input`. 
-
-Make clean will remove the default `data_output` and `data_input` files

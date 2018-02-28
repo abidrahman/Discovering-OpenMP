@@ -1,25 +1,14 @@
-CC : = gcc
-CFLAGS : = -g -Wall -fopenmp -lm -std=c99
-CFLAGSopenMP : = -g -Wall -fopenmp -lm -std=c99
+all: datagen linearsystemsolver serialtester
 
-all: createdata solver
+datagen: datagen.c Lab3IO.c
+			gcc datagen.c Lab3IO.c -o datagen
 
-# compile for our macbooks (gcc7)
-solver: linearsystemsolver/linearsystemsolver.c dependencies/Lab3IO.c
-	gcc-7 $^ $(CFLAGSopenMP) -o solver.o
+linearsystemsolver: linearsystemsolver.c Lab3IO.c
+			gcc linearsystemsolver.c Lab3IO.c -o linearsystemsolver -fopenmp -lm -std=c99 
 
-createdata: dependencies/datagen.c dependencies/Lab3IO.c 
-	@gcc $^ -o dependencies/datagen
-	@dependencies/datagen
-
-.DEFAULT_GOAL := labmachinesolver
-
-labmachinesolver: linearsystemsolver/linearsystemsolver.c dependencies/Lab3IO.c
-	gcc linearsystemsolver/linearsystemsolver.c dependencies/Lab3IO.c -g -Wall -fopenmp -lm -std=c99 -o solver.o
+serialtester: serialtester.c Lab3IO.c
+			gcc serialtester.c Lab3IO.c -o serialtester -lm
 
 clean:
 	@rm -rf *.o
-	@rm -rf dependencies/datagen
-	@rm -rf logfiles/data_input
-	@rm -rf logfiles/data_output
 
