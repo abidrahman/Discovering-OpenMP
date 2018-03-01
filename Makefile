@@ -1,13 +1,13 @@
-all: datagen linearsystemsolver baseline serialtester
+all: datagen main baseline serialtester
 
 datagen: datagen.c Lab3IO.c
 			gcc datagen.c Lab3IO.c -o datagen
 
-linearsystemsolver: linearsystemsolver.c Lab3IO.c
-			gcc linearsystemsolver.c Lab3IO.c -o linearsystemsolver -fopenmp -lm -std=c99 
+main: linearsystemsolver.c Lab3IO.c
+			gcc linearsystemsolver.c Lab3IO.c -o main -fopenmp -lm -std=c99 -g -Wall
 
 baseline: baseline.c Lab3IO.c
-			gcc baseline.c Lab3IO.c -o linearsystemsolver -fopenmp -lm -std=c99 
+			gcc baseline.c Lab3IO.c -o baseline -fopenmp -lm -std=c99 -g -Wall
 
 serialtester: serialtester.c Lab3IO.c
 			gcc serialtester.c Lab3IO.c -o serialtester -lm

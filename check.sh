@@ -18,8 +18,8 @@
 # Welcome
 echo "=====Evaluation for Lab 3 code.====="
 # Parameters
-Sizes=(1024)
-Cores=(4 16)
+Sizes=(64 256 1024)
+Cores=(1 4 16)
 Duplicates=4
 
 # Create temporary directory for testing and copy all exacutable to there.
@@ -47,10 +47,10 @@ if [ ! -f $srltstEX ]; then
 fi
 cp $srltstEX tmp/
 
-echo "Enter the exacutable file name for matrix multiplication and press [ENTER] (default is linearsystemsolver):"
+echo "Enter the exacutable file name for matrix multiplication and press [ENTER] (default is main):"
 read mainEX
 if [ "$mainEX" = "" ]; then
-	mainEX=linearsystemsolver
+	mainEX=main
 fi
 if [ ! -f $mainEX ]; then
 	echo "File $mainEX does not exist! Exiting............"
