@@ -10,7 +10,7 @@ int main(int argc, char* argv[]){
     double** Au;
     double* X;
     int* index;
-    double temp, res;
+    double temp;
     double start, end;
 
     if (argc<=1){   
@@ -31,52 +31,52 @@ int main(int argc, char* argv[]){
         X[0] = Au[0][1] / Au[0][0];
     else{
         /*Gaussian elimination*/
-        for (k = 0; k < size - 1; ++k){
-            /*Pivoting*/
-            temp = 0;
-            res = 0;
-            j = 0;
-            //SOMETHING ABOUT THIS MAKES IT SLOWER
-            //#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size, j) private(i, temp, res)
-            for (i = k; i < size; ++i) {
-                res = Au[index[i]][k] * Au[index[i]][k];
-                if (temp < res) {
-                    temp = res;
-                    j = i;
+        #pragma omp parallel num_threads(thread_count) default(none) shared(Au, X, index, size) private(i, j, k, temp)
+        {
+            for (k = 0; k < size - 1; ++k){
+                /*Pivoting*/
+                temp = 0;
+                j = 0;
+
+                for (i = k; i < size; ++i) {
+                    if (temp < Au[index[i]][k] * Au[index[i]][k]) {
+                        temp = Au[index[i]][k] * Au[index[i]][k];
+                        j = i;
+                    }
                 }
-            }
 
-            if (j != k) {
-                i = index[j];
-                index[j] = index[k];
-                index[k] = i;
+                #pragma omp single
+                {
+                    if (j != k) {
+                    i = index[j];
+                    index[j] = index[k];
+                    index[k] = i;
+                    }
+                
+                }
+    
+                /*calculating*/
+                #pragma omp for schedule(static, 64) private(temp, i, j) 
+                for (i = k + 1; i < size; ++i){
+                    temp = Au[index[i]][k] / Au[index[k]][k];
+                    for (j = k; j < size + 1; ++j)
+                        Au[index[i]][j] -= Au[index[k]][j] * temp;
+                }       
             }
-
-            //#pragma omp barrier       
-            /*calculating*/
-            //THIS IS THE BASELINE DIRECTIVE
-            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size) private(i, j, temp)
-            for (i = k + 1; i < size; ++i){
-                temp = Au[index[i]][k] / Au[index[k]][k];
-                for (j = k; j < size + 1; ++j)
-                    Au[index[i]][j] -= Au[index[k]][j] * temp;
-            }       
+            /*Jordan elimination*/
+            for (k = size - 1; k > 0; --k){
+                #pragma omp for schedule(static, 64) private(temp, i) 
+                for (i = k - 1; i >= 0; --i ){
+                    temp = Au[index[i]][k] / Au[index[k]][k];
+                    Au[index[i]][k] -= temp * Au[index[k]][k];
+                    Au[index[i]][size] -= temp * Au[index[k]][size];
+                } 
+            }
+            /*solution*/
+            #pragma omp for schedule(static, 64) private(k)
+            for (k=0; k< size; ++k)
+                X[k] = Au[index[k]][size] / Au[index[k]][k];
         }
-        /*Jordan elimination*/
-        //SOMETHING ABOUT THIS MAKES IT SLOWER
-        //#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, size, k) private(temp, i)
-        for (k = size - 1; k > 0; --k){
-            for (i = k - 1; i >= 0; --i ){
-                temp = Au[index[i]][k] / Au[index[k]][k];
-                Au[index[i]][k] -= temp * Au[index[k]][k];
-                Au[index[i]][size] -= temp * Au[index[k]][size];
-            } 
-        }
-        /*solution*/
-        //DOESN'T HELP THE SPEED
-        //#pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, index) private(k) schedule (static, 10)
-        for (k=0; k< size; ++k)
-            X[k] = Au[index[k]][size] / Au[index[k]][k];
     }
     GET_TIME(end);
     Lab3SaveOutput(X, size, end - start); 
