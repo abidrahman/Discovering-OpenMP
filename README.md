@@ -25,5 +25,6 @@ A bash script is provided to quickly run and test the multithreaded solution wit
  - Duplicates (amount of times each trial is run): 4
 
 To run the script:
+ - `chmod +x check.sh` (ensure correct file permissions)
  - `./check.sh`
 

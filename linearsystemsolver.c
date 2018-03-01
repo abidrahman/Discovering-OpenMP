@@ -36,47 +36,60 @@ int main(int argc, char* argv[]){
             temp = 0;
             res = 0;
             j = 0;
-            //SOMETHING ABOUT THIS MAKES IT SLOWER
-            //#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size, j) private(i, temp, res)
-            for (i = k; i < size; ++i) {
-                res = Au[index[i]][k] * Au[index[i]][k];
-                if (temp < res) {
-                    temp = res;
-                    j = i;
+            #pragma omp parallel num_threads(thread_count) 
+            {
+                //SOMETHING ABOUT THIS MAKES IT SLOWER
+                #pragma omp for schedule(dynamic)
+                for (i = k; i < size; ++i) {
+                    res = Au[index[i]][k] * Au[index[i]][k];
+                    #pragma omp critical
+                    {
+                        if (temp < res) {
+                            temp = res;
+                            j = i;
+                        }
+                    }
+                }
+
+                #pragma omp critical
+                {
+                    if (j != k) {
+                        i = index[j];
+                        index[j] = index[k];
+                        index[k] = i;
+                    }
+                }
+
+                #pragma omp barrier       
+                /*calculating*/
+                //THIS IS THE BASELINE DIRECTIVE
+                // #pragma omp for default(none) shared(Au, index, k, size) private(i, j, temp)
+                #pragma omp parallel for schedule(dynamic)
+                for (i = k + 1; i < size; ++i){
+                    temp = Au[index[i]][k] / Au[index[k]][k];
+                    for (j = k; j < size + 1; ++j)
+                        Au[index[i]][j] -= Au[index[k]][j] * temp;
                 }
             }
-
-            if (j != k) {
-                i = index[j];
-                index[j] = index[k];
-                index[k] = i;
-            }
-
-            //#pragma omp barrier       
-            /*calculating*/
-            //THIS IS THE BASELINE DIRECTIVE
-            #pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, k, size) private(i, j, temp)
-            for (i = k + 1; i < size; ++i){
-                temp = Au[index[i]][k] / Au[index[k]][k];
-                for (j = k; j < size + 1; ++j)
-                    Au[index[i]][j] -= Au[index[k]][j] * temp;
-            }       
         }
         /*Jordan elimination*/
-        //SOMETHING ABOUT THIS MAKES IT SLOWER
-        //#pragma omp parallel for num_threads(thread_count) default(none) shared(Au, index, size, k) private(temp, i)
-        for (k = size - 1; k > 0; --k){
-            for (i = k - 1; i >= 0; --i ){
-                temp = Au[index[i]][k] / Au[index[k]][k];
-                Au[index[i]][k] -= temp * Au[index[k]][k];
-                Au[index[i]][size] -= temp * Au[index[k]][size];
-            } 
+        #pragma omp parallel num_threads(thread_count) 
+        {
+            //SOMETHING ABOUT THIS MAKES IT SLOWER
+            #pragma omp for schedule(dynamic)
+            for (k = size - 1; k > 0; --k){
+                for (i = k - 1; i >= 0; --i ){
+                    temp = Au[index[i]][k] / Au[index[k]][k];
+                    Au[index[i]][k] -= temp * Au[index[k]][k];
+                    Au[index[i]][size] -= temp * Au[index[k]][size];
+                } 
+            }
+            /*solution*/
+            //DOESN'T HELP THE SPEED
+            #pragma omp for schedule(dynamic)
+            for (k=0; k< size; ++k)
+                X[k] = Au[index[k]][size] / Au[index[k]][k];
         }
-        /*solution*/
-        //DOESN'T HELP THE SPEED
-        //#pragma omp parallel for num_threads(thread_count) default(none) shared(X, Au, size, index) private(k) schedule (static, 10)
-        for (k=0; k< size; ++k)
-            X[k] = Au[index[k]][size] / Au[index[k]][k];
     }
     GET_TIME(end);
     Lab3SaveOutput(X, size, end - start); 
