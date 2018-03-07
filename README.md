@@ -1,9 +1,7 @@
 Repository for ECE 420 Lab 3
 
-### Goal: Explore openmp multithreading and compare the speed of different pragma operations
-### In order to do so, we solve a linear system of equations via Gauss-Jordan elimination
+### Goal: Explore openmp multithreading and compare the speed of different pragma operations in order to do so, we solve a linear system of equations via Gauss-Jordan elimination
 
-### Implementation 
 The original baseline implementation included just a single pragma directive that parallelized the main calculation during the gaussian elimination part of the algorithm. Although this was significantly faster than a serial solution, a lot of improvements can be made to the baseline solution to speed up the computation. 
 
 The first change made was to declare the team of pragma threads on line 34, using pragma omp parallel , using this declaration, we are now able to use re use the same team of threads multiple times throughout the algorithm. The next objective was to determine where to use the threads and which parts of the algorithm can be parallelized. There are two additional portions of the algorithm that can be parallelized, one is the inner loop of the Jordan elimination and another is the determination of the main solution in the final for loop. Along with these two changes, we also changed the main pragma directive from the baseline solution to re use the team of threads that was declared.
