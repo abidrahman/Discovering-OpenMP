@@ -1,4 +1,4 @@
-all: datagen main baseline serialtester
+all: datagen serialtester main baseline
 
 datagen: dependencies/datagen.c dependencies/Lab3IO.c
 			gcc dependencies/datagen.c dependencies/Lab3IO.c -o datagen
