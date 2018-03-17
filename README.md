@@ -1,5 +1,3 @@
-Repository for ECE 420 Lab 3
-
 ### Goal: Explore openmp multithreading and compare the speed of different pragma operations in order to do so, we solve a linear system of equations via Gauss-Jordan elimination
 
 The original baseline implementation included just a single pragma directive that parallelized the main calculation during the gaussian elimination part of the algorithm. Although this was significantly faster than a serial solution, a lot of improvements can be made to the baseline solution to speed up the computation. 
