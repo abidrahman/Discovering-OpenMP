@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <omp.h>
-#include "Lab3IO.h"
-#include "timer.h"
+#include "../dependencies/Lab3IO.h"
+#include "../dependencies/timer.h"
 
 int main(int argc, char* argv[]){
     int i, j, k, size;

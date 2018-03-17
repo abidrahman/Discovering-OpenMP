@@ -1,7 +1,10 @@
 *.o
-dependencies/datagen
-logfiles/data_input
-logfiles/data_output
+*.dSYM/
+
+datagen
+main 
+serialtester
+baseline
 
 readme.txt 
 members.txt
